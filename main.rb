@@ -6,20 +6,18 @@ require 'rb-inotify'
 
 $rules = Array.new
 $users = Array.new
-$ip_parse = "/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/"
+$ip_parse = /\d+\.\d+\.\d+\.\d+/
 
 class User
 	
 	def intialize(ip)
 		@ip = ip
-		@attempts = 0
+		@attempts = 1
 	end
 
 end
 
 class Rule
-	
-	attr_writer : service, event, response, attempts, time_ban, unban_response
 	
 	def intialize(rule)
 		vars = rule.split(":")
@@ -40,8 +38,6 @@ end
 class Manager
 	
 	def intialize()
-		setup_iptables
-
 		File.open($rcfg, "r") do |aFile|
 			aFile.each_line("\n") do |line|
 				if line.start_with?("#")
@@ -56,12 +52,12 @@ class Manager
 	end
 
 	def setup_iptables()
-		system("iptables -X lxIDS")
-		system("iptables -D INPUT -j lxIDS")
-		system("iptables -D OUTPUT -j lxIDS")
-		system("iptables -N lxIDS")
-		system("iptables -A INPUT -j lxIDS")
-		system("iptables -A OUTPUT -j lxIDS")
+		system("sudo iptables -X lxIDS")
+		system("sudo iptables -D INPUT -j lxIDS")
+		system("sudo iptables -D OUTPUT -j lxIDS")
+		system("sudo iptables -N lxIDS")
+		system("sudo iptables -A INPUT -j lxIDS")
+		system("sudo iptables -A OUTPUT -j lxIDS")
 	end
 
 	def check_rules
@@ -78,12 +74,15 @@ class Manager
 				$users.each do |user|
 					if user.ip == line[$ip_parse] && user.attempts + 1 == rule.attempts
 						system(rule.response.sub!('%IP%', user.ip))
+						puts "Added ban for " + user.ip + "on service " + rule.service
 						user.attempts = 0
 						if(rule.time_ban > 0)
 							system(rule.unban_response.sub!('%IP%', user.ip))
 						elsif user.ip == line[$ip_parse] && user.attempts += 1 < rule.attempts
 							next
 						end
+					else
+						$users.push(User.new(line[$ip_parse]))
 					end
 				end
 			end
@@ -99,11 +98,13 @@ puts "Welcome to the lxIDS"
 puts "Intializing rules..."
 
 rule_manager = Manager.new
+rule_manager.setup_iptables
 
-File.open($log) do |file|
+open($log) do |file|
 	file.seek(0, IO::SEEK_END)     
 	queue = INotify::Notifier.new  
 	queue.watch($log, :modify) do
+		puts "LOL"
 		rule_manager.check_rules          		 # this is a callback block
 	end
 	queue.run                      
