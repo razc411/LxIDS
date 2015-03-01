@@ -1,0 +1,4 @@
+#Install instructions
+yum install ruby
+yum install ruby-devel
+gem install rb-inotify
