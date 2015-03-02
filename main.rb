@@ -159,20 +159,32 @@ class Manager
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
 	def setup_iptables()
-		system("sudo iptables -X lxIDS")
-		system("sudo iptables -D INPUT -j lxIDS")
-		system("sudo iptables -D OUTPUT -j lxIDS")
-		system("sudo iptables -N lxIDS")
-		system("sudo iptables -A INPUT -j lxIDS")
-		system("sudo iptables -A OUTPUT -j lxIDS")
+		`sudo iptables -X lxIDS 2> /dev/null`
+		`sudo iptables -D INPUT -j lxIDS 2> /dev/null`
+		`sudo iptables -D OUTPUT -j lxIDS 2> /dev/null`
+		`sudo iptables -N lxIDS`
+		`sudo iptables -A INPUT -j lxIDS`
+		`sudo iptables -A OUTPUT -j lxIDS`
 	end
-
+	# Function: intialize(ip)
+	# => ip 	: the ip address of this specific user
+	# Author: 	Ramzi Chennafi
+	# Returns: Nothing
+	# Date: 	Febuary 28 2015
+	# Description
+	# Constructor for user. Creates the attempt array and sets user IP.
 	def add_new_user(ip, rule)
 		$users[ip] = User.new(ip)
 		$users[ip].add_service_attempt(rule.service)
 		puts "Failed attempt #" + $users[ip].attempts[rule.service].to_s + " on " + rule.service + " by " + ip
 	end
-
+	# Function: intialize(ip)
+	# => ip 	: the ip address of this specific user
+	# Author: 	Ramzi Chennafi
+	# Returns: Nothing
+	# Date: 	Febuary 28 2015
+	# Description
+	# Constructor for user. Creates the attempt array and sets user IP.
 	def ban_user(ip, rule)
 		system("#{rule.response}".sub!('%IP%', ip))
 		puts "Added ban for " + ip + " on service " + rule.service
@@ -182,10 +194,19 @@ class Manager
 		$users[ip].time_to_unban = get_time + rule.time_ban
 
 		if(rule.time_ban > 0)
-			#system('(crontab -l ; echo "0 4 * * * ' + "#{rule.unban_response}".sub!('%IP%', ip) + ')| crontab -"')
+			minutes = $users[ip].time_to_unban % 60
+			hours = $users[ip].time_to_unban / 60
+			ub_response = "#{rule.unban_response}".sub!('%IP%', ip)
+			`(crontab -l ; echo "#{minutes} #{hours} * * * #{ub_response}")| crontab -`
 		end
 	end
-
+	# Function: intialize(ip)
+	# => ip 	: the ip address of this specific user
+	# Author: 	Ramzi Chennafi
+	# Returns: Nothing
+	# Date: 	Febuary 28 2015
+	# Description
+	# Constructor for user. Creates the attempt array and sets user IP.
 	def is_user_banned(ip, rule)
 		if $users[ip].status == "BANNED" && get_time >= $users[ip].time_to_unban
 			$users[ip].time_to_unban = 0
@@ -246,11 +267,9 @@ class Manager
 	# Returns: Nothing
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
-	def check_rules
-		File.open($log, "r") do |aFile|
-			aFile.each_line("\n") do |line|
-				call_rule(line)
-			end
+	def check_rules(aFile)
+		aFile.each_line("\n") do |line|
+			call_rule(line)
 		end
 	end
 end
@@ -268,10 +287,11 @@ puts "Welcome to the lxIDS"
 puts "Intializing rules..."
 
 rule_manager = Manager.new
-
-queue = INotify::Notifier.new  
-queue.watch($log, :modify) do
-			rule_manager.check_rules # => sets this function as the callback when the log is modified
-end
-
-queue.run                
+File.open($log) do |aFile|
+	aFile.seek(0, IO::SEEK_END)
+	queue = INotify::Notifier.new  
+	queue.watch($log, :modify) do
+				rule_manager.check_rules(aFile) # => sets this function as the callback when the log is modified
+	end
+	queue.run
+end                
