@@ -1,3 +1,9 @@
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
 Feb 23 21:17:06 DataComm gdm-password]: pam_unix(gdm-password:session): session opened for user root by (unknown)(uid=0)
 Feb 23 21:17:06 DataComm gdm-launch-environment]: pam_unix(gdm-launch-environment:session): session closed for user gdm
 Feb 23 21:17:06 DataComm polkitd[717]: Unregistered Authentication Agent for unix-session:c1 (system bus name :1.27, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8) (disconnected from bus)
@@ -6,9 +12,10 @@ Feb 23 21:38:48 DataComm gdm-password]: gkr-pam: unlocked login keyring
 Feb 23 22:06:36 DataComm gdm-password]: gkr-pam: unlocked login keyring
 Feb 23 22:26:02 DataComm gdm-password]: pam_unix(gdm-password:auth): conversation failed
 Feb 23 22:26:02 DataComm gdm-password]: pam_unix(gdm-password:auth): auth could not identify password for [root]
-Feb 23 22:26:02 DataComm gdm-password]: pam_succeed_if(gdm-password:auth): requirement "uid >= 1000" not met by user "root"
+Feb 23 22:26:02 DataComm gdm-password]: pam_succeed_dif(gdm-password:auth): requirement "uid >= 1000" not met by user "root"
 Feb 23 22:26:02 DataComm gdm-password]: gkr-pam: no password is available for user
-Feb 23 22:26:14 DataComm gdm-password]: gkr-pam: unlocked login keyring
+Feb 23 22:26:14 DataComm gdm-password]: gkr-pam: unlocked login ke
+dyring
 Feb 23 22:26:24 DataComm systemd: pam_unix(systemd-user:session): session opened for user root by (uid=0)
 Feb 23 22:26:24 DataComm systemd: pam_unix(systemd-user:session): session closed for user root
 Feb 23 22:26:24 DataComm sshd[773]: Received signal 15; terminating.
@@ -16,12 +23,13 @@ Feb 23 22:26:24 DataComm systemd: pam_unix(systemd-user:session): session opened
 Feb 23 22:26:24 DataComm systemd: pam_unix(systemd-user:session): session closed for user gdm
 Feb 23 22:26:24 DataComm systemd: pam_unix(systemd-user:session): session closed for user root
 Feb 23 22:26:24 DataComm systemd: pam_unix(systemd-user:session): session closed for user gdm
-Feb 23 22:36:05 DataComm polkitd[725]: Loading rules from directory /etc/polkit-1/rules.d
+Feb 23 22:36:05 DataComm polkitd[725]: Loading rules from directory /etcs/polkit-1/rules.d
 Feb 23 22:36:05 DataComm polkitd[725]: Loading rules from directory /usr/share/polkit-1/rules.d
 Feb 23 22:36:05 DataComm polkitd[725]: Finished loading, compiling and executing 5 rules
-Feb 23 22:36:05 DataComm polkitd[725]: Acquired the name org.freedesktop.PolicyKit1 on the system bus
+Feb 23 22:36:05 DataComm polkitd[725]: Acquired the name org.freedesktop.PolicyKit1 on tche system bus
 Feb 23 22:36:06 DataComm sshd[753]: Server listening on 0.0.0.0 port 22.
 Feb 23 22:36:06 DataComm sshd[753]: Server listening on :: port 22.
+s
 Feb 23 22:36:08 DataComm systemd: pam_unix(systemd-user:session): session opened for user gdm by (uid=0)
 Feb 23 22:36:08 DataComm gdm-launch-environment]: pam_unix(gdm-launch-environment:session): session opened for user gdm by (uid=0)
 Feb 23 22:36:12 DataComm polkitd[725]: Registered Authentication Agent for unix-session:c1 (system bus name :1.27 [gnome-shell --mode=gdm], object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8)
@@ -120,15 +128,20 @@ Feb 27 14:03:53 DataComm gdm-password]: pam_succeed_if(gdm-password:auth): requi
 Feb 27 14:03:53 DataComm gdm-password]: gkr-pam: no password is available for user
 Feb 27 14:03:56 DataComm gdm-password]: gkr-pam: unlocked login keyring
 Feb 27 14:07:52 DataComm sshd[7874]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.0.7  user=root
-Feb 27 14:07:52 DataComm sshd[7874]: pam_succeed_if(sshd:auth): requirement "uid >= 1000" not met by user "root"
+Feb 27 14:07:52 DataComm sshd[7874]: pam_succeed_if(sshd:auth): requirement
+ "uid >= 1000" not met by user "root"
 Feb 27 14:07:54 DataComm sshd[7874]: Failed password for root from 192.168.0.7 port 60830 ssh2
-Feb 27 14:07:57 DataComm sshd[7874]: pam_succeed_if(sshd:auth): requirement "uid >= 1000" not met by user "root"
-Feb 27 14:07:59 DataComm sshd[7874]: Failed password for root from 192.168.0.7 port 60830 ssh2
+Feb 27 14:07:57 DataComm sshd[7874]: pam_succeed_if(sshd:auth): requi
+rement "uid >= 1000" not met by user "root"
+Feb 27 14:07:59 DataComm sshd[7874]: Failed password for root frodm 192.168.0.7 port 60830 ssh2
 Feb 27 14:08:15 DataComm sshd[7874]: pam_succeed_if(sshd:auth): requirement "uid >= 1000" not met by user "root"
 Feb 27 14:08:17 DataComm sshd[7874]: Failed password for root from 192.168.0.7 port 60830 ssh2
 Feb 27 14:08:17 DataComm sshd[7874]: Connection closed by 192.168.0.7 [preauth]
 Feb 27 14:08:17 DataComm sshd[7874]: PAM 2 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.0.7  user=root
 Feb 27 14:08:28 DataComm sshd[7898]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.0.7  user=root
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+
 Feb 27 14:08:28 DataComm sshd[7898]: pam_succeed_if(sshd:auth): requirement "uid >= 1000" not met by user "root"
 Feb 27 14:08:30 DataComm sshd[7898]: Failed password for root from 192.168.0.7 port 60831 ssh2
 Feb 27 14:08:32 DataComm sshd[7898]: pam_succeed_if(sshd:auth): requirement "uid >= 1000" not met by user "root"
@@ -203,24 +216,80 @@ Feb 27 14:51:06 DataComm gdm-password]: pam_unix(gdm-password:session): session 
 Feb 27 14:51:06 DataComm gdm-launch-environment]: pam_unix(gdm-launch-environment:session): session closed for user gdm
 Feb 27 14:51:06 DataComm polkitd[737]: Unregistered Authentication Agent for unix-session:c1 (system bus name :1.31, object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8) (disconnected from bus)
 Feb 27 14:51:08 DataComm polkitd[737]: Registered Authentication Agent for unix-session:2 (system bus name :1.51 [/usr/bin/gnome-shell], object path /org/freedesktop/PolicyKit1/AuthenticationAgent, locale en_US.UTF-8)
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
 Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
 
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
 
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
-Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+s
+
+duser.attempts[rule.service]
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2	
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+no implicit conversion of String into Integer (TypeError)
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+DateTime.now.strftime("%H")DateTime.now.strftime("%H")
+DateTime.now.strftime("%H")
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2
+Feb 27 14:19:22 DataComm sshd[8290]: Failed password for root from 192.168.0.7 port 60l839 ssh2

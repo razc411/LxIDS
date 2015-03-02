@@ -7,7 +7,7 @@ require 'rb-inotify'
 require 'date'
 #####GLOBAL INSTANCES##################################################################
 $rules = Array.new					# => Holds the IDS rules
-$users = Array.new 					# => Holds the user attempt list
+$users = Hash.new 					# => Holds the user attempt list
 $ip_parse = /\d+\.\d+\.\d+\.\d+/	# => Used to parse for user IP addresses
 # Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
@@ -17,8 +17,8 @@ $ip_parse = /\d+\.\d+\.\d+\.\d+/	# => Used to parse for user IP addresses
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
 def get_time
-	hours = DateTime.now.strftime("%H")
-	minutes = DateTime.now.strftime("%M")
+	hours = DateTime.now.strftime("%H").to_i
+	minutes = DateTime.now.strftime("%M").to_i
 	return (hours * 60) + minutes
 end
 #####END GLOBAL INSTANCES###############################################################
@@ -34,7 +34,7 @@ end
 # User class defines a single user. Holds the failed attempts made on specific services.
 ########################################################################################
 class User
-	attr_reader :ip :attempts :last_attempt
+	attr_accessor :ip, :attempts, :last_attempt
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
 	# Author: 	Ramzi Chennafi
@@ -42,10 +42,10 @@ class User
 	# Returns: Nothing
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
-	def intialize(ip)
+	def initialize(ip)
 		@ip = ip
-		@attempts = Array.new
-		@last_attempt = Array.new
+		@attempts = Hash.new
+		@last_attempt = Hash.new(Hash.new)
 	end
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
@@ -56,8 +56,8 @@ class User
 	# Constructor for user. Creates the attempt array and sets user IP.
 	def add_service_attempt(service)
 		@attempts[service] = 1
-		@last_attempt[service][time] = get_time
-		@last_attempt[service][date] = DateTime.now.strftime("%Y%m%d")
+		@last_attempt[service]["time"] = get_time
+		@last_attempt[service]["date"] = DateTime.now.strftime("%Y%m%d")
 	end
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
@@ -66,12 +66,12 @@ class User
 	# Returns: Nothing
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
-	def check_time(attempt_time, service)
-		if get_time - last_attempt[service][time] >= attempt_time && last_attempt[service][date] == DateTime.now.strftime("%Y%m%d")
+	def check_time(attempt_time, service) #############FIX THIS IN ACTUAL TESTING#####################
+		#if ((get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d")
+		#	return true
+		#else
+		#	return false
 			return true
-		else
-			return false
-		end
 	end
 end
 ########################################################################################
@@ -86,7 +86,7 @@ end
 # User class defines a single user. Holds the failed attempts made on specific services.
 ########################################################################################
 class Rule
-	attr_reader :service :event :response :attempt_time :attempts :time_ban :unban_response
+	attr_accessor :service, :event, :response, :attempt_time, :attempts, :time_ban, :unban_response
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
 	# Author: 	Ramzi Chennafi
@@ -94,14 +94,14 @@ class Rule
 	# Returns: Nothing
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
-	def intialize(rule)
+	def initialize(rule)
 		vars = rule.split(":")
 		@service 		= vars[0]
 		@event 			= vars[1]
 		@response 		= vars[2]
-		@attempt_time   = vars[3]
-		@attempts 		= vars[4]
-		@time_ban 		= vars[5]
+		@attempts 		= vars[3].to_i
+		@attempt_time	= vars[4].to_i
+		@time_ban 		= vars[5].to_i
 		@unban_response = vars[6]
 	end
 	# Function: intialize(ip)
@@ -112,7 +112,7 @@ class Rule
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
 	def print_rule()
-		puts service + " will ban after " + attempts " attempts at :" + event + ", for " + timeBan + " minutes."
+		puts service + " will ban after " + attempts.to_s + " attempts at event: " + event + ", for " + time_ban.to_s + " minutes."
 	end
 end
 ########################################################################################
@@ -134,14 +134,15 @@ class Manager
 	# Returns: Nothing
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
-	def intialize()
+	def initialize()
+		setup_iptables
 		File.open($rcfg, "r") do |aFile|
 			aFile.each_line("\n") do |line|
 				if line.start_with?("#")
 					next
 				else
 					temp = Rule.new(line)
-					rules.push(temp)
+					$rules.push(temp)
 					temp.print_rule
 				end
 			end
@@ -171,30 +172,29 @@ class Manager
 	# Constructor for user. Creates the attempt array and sets user IP.
 	def call_rule(line)
 		$rules.each do |rule|
-			if line.includes?(rule.service) and line.includes?(rule.event)
-				create_new = 0
-				$users.each do |user|
-					if user.ip == line[$ip_parse] && !user.attempts[rule.service]
-						user.add_service_attempt(rule.service)
-						puts "Failed attempt #" + user.attempts[rule.service] + " on " + rule.service + " by " + user.ip
+			if line.include?("#{rule.service}") && line.include?("#{rule.event}")
+				ip_addr = line[$ip_parse]
+				if !$users.has_key?(ip_addr)
+					$users[ip_addr] = User.new(ip_addr)
+					$users[ip_addr].add_service_attempt(rule.service)
+				else
+					if $users[ip_addr].attempts[rule.service] == 0
+						$users[ip_addr].add_service_attempt(rule.service)
+						puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
 					
-					elsif user.ip == line[$ip_parse] && user.attempts[rule.service] + 1 == rule.attempts && user.check_time(rule.attempt_time, rule.service)
-						system(rule.response.sub!('%IP%', user.ip))
-						puts "Added ban for " + user.ip + "on service " + rule.service
-						user.attempts[rule.service] = 0
+					elsif (($users[ip_addr].attempts[rule.service] + 1) == rule.attempts) && $users[ip_addr].check_time(rule.attempt_time, rule.service)
+						system("#{rule.response}".sub!('%IP%', ip_addr))
+						puts "Added ban for " + ip_addr + " on service " + rule.service
+						$users[ip_addr].attempts[rule.service] = 0
 						
 						if(rule.time_ban > 0)
-							system(rule.unban_response.sub!('%IP%', user.ip))
+							system('(crontab -l ; echo "0 4 * * * ' + "#{rule.unban_response}".sub!('%IP%', ip_addr) + ')| crontab -')
 						end
 
-					elsif user.ip == line[$ip_parse] && user.attempts[rule.service] += 1 < rule.attempts && user.check_time(rule.attempt_time, rule.service)
-						puts "Failed attempt #" + user.attempts[rule.service] + " on " + rule.service + " by " + user.ip
-					end
-
-					if (create_new += 1) == users.length
-						temp = User.new(line[$ip_parse])
-						$users.push(temp)
-						temp.add_service_attempt(rule.service)
+					elsif (($users[ip_addr].attempts[rule.service] + 1) < rule.attempts) && $users[ip_addr].check_time(rule.attempt_time, rule.service)
+						puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
+						$users[ip_addr].attempts[rule.service] += 1
+					
 					end
 				end
 			end
@@ -210,7 +210,7 @@ class Manager
 	def check_rules
 		File.open($log, "r") do |aFile|
 			aFile.each_line("\n") do |line|
-				self.call_rule(line)
+				call_rule(line)
 			end
 		end
 	end
@@ -229,7 +229,6 @@ puts "Welcome to the lxIDS"
 puts "Intializing rules..."
 
 rule_manager = Manager.new
-rule_manager.setup_iptables
    
 queue = INotify::Notifier.new  
 queue.watch($log, :modify) do
