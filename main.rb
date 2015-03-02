@@ -1,5 +1,5 @@
 #CONFIGURATION###############################
-$log = "secure"     #log to watch for events
+$log = "/var/log/auth.log"     #log to watch for events
 $rcfg = "rules.cfg" #rules config file location
 #DO NOT EDIT BELOW, MAIN CODE BODY###########
 
@@ -34,7 +34,7 @@ end
 # User class defines a single user. Holds the failed attempts made on specific services.
 ########################################################################################
 class User
-	attr_accessor :ip, :attempts, :last_attempt
+	attr_accessor :ip, :attempts, :last_attempt, :status, :last_banned, :time_to_unban
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
 	# Author: 	Ramzi Chennafi
@@ -46,6 +46,9 @@ class User
 		@ip = ip
 		@attempts = Hash.new
 		@last_attempt = Hash.new(Hash.new)
+		@status = "VALID"
+		@last_banned = 0
+		@time_to_unban = 0
 	end
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
@@ -163,6 +166,38 @@ class Manager
 		system("sudo iptables -A INPUT -j lxIDS")
 		system("sudo iptables -A OUTPUT -j lxIDS")
 	end
+
+	def add_new_user(ip, rule)
+		$users[ip] = User.new(ip)
+		$users[ip].add_service_attempt(rule.service)
+		puts "Failed attempt #" + $users[ip].attempts[rule.service].to_s + " on " + rule.service + " by " + ip
+	end
+
+	def ban_user(ip, rule)
+		system("#{rule.response}".sub!('%IP%', ip))
+		puts "Added ban for " + ip + " on service " + rule.service
+		$users[ip].attempts[rule.service] = 0
+		$users[ip].status = "BANNED"
+		$users[ip].last_banned = get_time
+		$users[ip].time_to_unban = get_time + rule.time_ban
+
+		if(rule.time_ban > 0)
+			#system('(crontab -l ; echo "0 4 * * * ' + "#{rule.unban_response}".sub!('%IP%', ip) + ')| crontab -"')
+		end
+	end
+
+	def is_user_banned(ip, rule)
+		if $users[ip].status == "BANNED" && get_time >= $users[ip].time_to_unban
+			$users[ip].time_to_unban = 0
+			$users[ip].last_banned = 0
+			$users[ip].status = "VALID"
+			return false
+		elsif $users[ip].status == "VALID"
+			return false
+		end 
+
+		return true
+	end
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
 	# Author: 	Ramzi Chennafi
@@ -174,27 +209,31 @@ class Manager
 		$rules.each do |rule|
 			if line.include?("#{rule.service}") && line.include?("#{rule.event}")
 				ip_addr = line[$ip_parse]
-				if !$users.has_key?(ip_addr)
-					$users[ip_addr] = User.new(ip_addr)
-					$users[ip_addr].add_service_attempt(rule.service)
-				else
-					if $users[ip_addr].attempts[rule.service] == 0
-						$users[ip_addr].add_service_attempt(rule.service)
-						puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
-					
-					elsif (($users[ip_addr].attempts[rule.service] + 1) == rule.attempts) && $users[ip_addr].check_time(rule.attempt_time, rule.service)
-						system("#{rule.response}".sub!('%IP%', ip_addr))
-						puts "Added ban for " + ip_addr + " on service " + rule.service
-						$users[ip_addr].attempts[rule.service] = 0
-						
-						if(rule.time_ban > 0)
-							system('(crontab -l ; echo "0 4 * * * ' + "#{rule.unban_response}".sub!('%IP%', ip_addr) + ')| crontab -')
-						end
+				
+				if $users.has_key?(ip_addr) 
+					if is_user_banned(ip_addr, rule)
+						next
+					end
+				end
 
-					elsif (($users[ip_addr].attempts[rule.service] + 1) < rule.attempts) && $users[ip_addr].check_time(rule.attempt_time, rule.service)
-						puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
-						$users[ip_addr].attempts[rule.service] += 1
-					
+				if !$users.has_key?(ip_addr)
+					add_new_user(ip_addr, rule)
+				else
+					case $users[ip_addr].attempts[rule.service]
+						when 0
+							$users[ip_addr].add_service_attempt(rule.service)
+							puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
+						
+						when (rule.attempts - 1)
+							if $users[ip_addr].check_time(rule.attempt_time, rule.service)
+								ban_user(ip_addr, rule)
+							end
+
+						when 1..(rule.attempts - 2)
+							if $users[ip_addr].check_time(rule.attempt_time, rule.service)
+								$users[ip_addr].attempts[rule.service] += 1
+								puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
+							end
 					end
 				end
 			end
@@ -229,14 +268,10 @@ puts "Welcome to the lxIDS"
 puts "Intializing rules..."
 
 rule_manager = Manager.new
-   
+
 queue = INotify::Notifier.new  
 queue.watch($log, :modify) do
-	rule_manager.check_rules # => sets this function as the callback when the log is modified
+			rule_manager.check_rules # => sets this function as the callback when the log is modified
 end
-queue.run                      
 
-
-
-
-
+queue.run                
