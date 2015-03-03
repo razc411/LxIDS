@@ -79,7 +79,7 @@ class User
 			return true
 		end
 		@attempts[service] = 1
-		puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
+		puts "Failed attempt #" + $users[ip].attempts[rule.service].to_s + " on " + rule.service + " by " + ip
 		return false;
 	end
 end
