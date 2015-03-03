@@ -60,6 +60,10 @@ class User
 	# Constructor for user. Creates the attempt array and sets user IP.
 	def add_service_attempt(service)
 		@attempts[service] = 1
+		set_time_attempt(service)
+	end
+
+	def set_time_attempt(service)
 		@last_attempt[service]["time"] = get_time
 		@last_attempt[service]["date"] = DateTime.now.strftime("%Y%m%d")
 	end
@@ -71,9 +75,10 @@ class User
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
 	def check_time(attempt_time, service) #############FIX THIS IN ACTUAL TESTING#####################
-		if ((get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d")
+		if (get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d")
 			return true
 		end
+		@attempts[service] = 1
 		return false;
 	end
 end
@@ -177,6 +182,7 @@ class Manager
 		$users[ip] = User.new(ip)
 		$users[ip].add_service_attempt(rule.service)
 		puts "Failed attempt #" + $users[ip].attempts[rule.service].to_s + " on " + rule.service + " by " + ip
+		$users[ip].set_time_attempt(rule.service)
 	end
 	# Function: intialize(ip)
 	# => ip 	: the ip address of this specific user
@@ -257,6 +263,8 @@ class Manager
 								puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
 							end
 					end
+
+					$users[ip_addr].set_time_attempt(rule.service)
 				end
 			end
 		end
