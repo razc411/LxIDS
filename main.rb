@@ -74,8 +74,8 @@ class User
 	# Returns: Nothing
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
-	def check_time(attempt_time, service) #############FIX THIS IN ACTUAL TESTING#####################
-		if (get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && (last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d"))
+	def check_time(attempt_time, service) 
+		if ((get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && (last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d"))
 			return true
 		end
 		@attempts[service] = 1
