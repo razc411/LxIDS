@@ -1,6 +1,6 @@
 $log = Array.new
 #CONFIGURATION###############################
-$log.push("/var/log/auth.log")     #log to watch for events
+$log.push("/var/log/secure")     #log to watch for events
 $rcfg = "rules.cfg" #rules config file location
 #DO NOT EDIT BELOW, MAIN CODE BODY###########
 
@@ -79,6 +79,7 @@ class User
 			return true
 		end
 		@attempts[service] = 1
+		puts "Failed attempt #" + $users[ip_addr].attempts[rule.service].to_s + " on " + rule.service + " by " + ip_addr
 		return false;
 	end
 end
