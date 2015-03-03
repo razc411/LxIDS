@@ -1,5 +1,6 @@
+$log = Array.new
 #CONFIGURATION###############################
-$log = "/var/log/auth.log"     #log to watch for events
+$log.push("/var/log/auth.log")     #log to watch for events
 $rcfg = "rules.cfg" #rules config file location
 #DO NOT EDIT BELOW, MAIN CODE BODY###########
 
@@ -287,11 +288,17 @@ puts "Welcome to the lxIDS"
 puts "Intializing rules..."
 
 rule_manager = Manager.new
-File.open($log) do |aFile|
-	aFile.seek(0, IO::SEEK_END)
-	queue = INotify::Notifier.new  
-	queue.watch($log, :modify) do
-				rule_manager.check_rules(aFile) # => sets this function as the callback when the log is modified
+
+queue = Array.new
+$log.each do |logfile|
+	File.open(logfile) do |aFile|
+		aFile.seek(0, IO::SEEK_END)
+		temp = INotify::Notifier.new  
+		queue.push(temp)  
+		temp.watch(logfile, :modify) do
+			rule_manager.check_rules(aFile) # => sets this function as the callback when the log is modified
+		end
+		temp.run
 	end
-	queue.run
-end                
+end
+               

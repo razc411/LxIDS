@@ -1,4 +1,12 @@
-#Install instructions
-yum install ruby
-yum install ruby-devel
-gem install rb-inotify
+A simple IPS system for Linux. Watches multiple user specified files for
+user specified rules. These rules include the ability to create permanent and temporary 
+ip bans.
+
+main.rb - the central ruby script for the IPS, run this to start the IPS
+
+install.script - the installation script for the application, must be run as a super user
+	installs the script directly into the crontab so it starts every time you reboot
+
+rules.cfg - the modifiable rules file for the IPS system. Parsed for rules to watch for.
+
+Created using Ruby.
