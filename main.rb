@@ -71,11 +71,10 @@ class User
 	# Description
 	# Constructor for user. Creates the attempt array and sets user IP.
 	def check_time(attempt_time, service) #############FIX THIS IN ACTUAL TESTING#####################
-		#if ((get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d")
-		#	return true
-		#else
-		#	return false
+		if ((get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d")
 			return true
+		end
+		return false;
 	end
 end
 ########################################################################################
@@ -250,6 +249,7 @@ class Manager
 							if $users[ip_addr].check_time(rule.attempt_time, rule.service)
 								ban_user(ip_addr, rule)
 							end
+
 
 						when 1..(rule.attempts - 2)
 							if $users[ip_addr].check_time(rule.attempt_time, rule.service)
