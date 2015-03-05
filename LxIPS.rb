@@ -1,5 +1,5 @@
 #CONFIGURATION#########################################################################
-$log = ["/home/raz/Github/LxIDS/sec"]			# => Logs to watch for events
+$log = ["/var/log/secure"]			# => Logs to watch for events
 $rcfg = "rules.cfg" 		# => rules config file location
 #DO NOT EDIT BELOW, MAIN CODE BODY#####################################################
 #DO NOT EDIT BELOW, MAIN CODE BODY#####################################################
