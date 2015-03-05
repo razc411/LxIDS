@@ -68,8 +68,6 @@ class Manager
 	def add_new_user(ip, rule)
 		@@users[ip] = User.new(ip)
 		@@users[ip].add_service_attempt(rule.service)
-		puts "Failed attempt #" + @@users[ip].attempts[rule.service].to_s + " on " + rule.service + " by " + ip
-		@@users[ip].set_time_attempt(rule.service)
 	end
 	# Function 	: ban_user(ip, rule)
 	# => ip 	: the ip address of this specific user
@@ -138,7 +136,6 @@ class Manager
 					case @@users[ip_addr].attempts[rule.service]
 						when 0
 							@@users[ip_addr].add_service_attempt(rule.service)
-							@@users[ip_addr].print_attempt(service)
 						
 						when (rule.attempts - 1)
 							if @@users[ip_addr].check_time(rule.attempt_time, rule.service)
@@ -148,7 +145,7 @@ class Manager
 						when 1..(rule.attempts - 2)
 							if @@users[ip_addr].check_time(rule.attempt_time, rule.service)
 								@@users[ip_addr].attempts[rule.service] += 1
-								@@users[ip_addr].print_attempt(service)
+								@@users[ip_addr].print_attempt(rule.service)
 							end
 					end
 				end

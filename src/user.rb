@@ -40,6 +40,7 @@ class User
 	def add_service_attempt(service)
 		@attempts[service] = 1
 		set_time_attempt(service)
+		self.print_attempt(service)
 	end
 	# Function 	: set_time_attempt(service)
 	# => service : the service to set the time of the last attempt for
@@ -64,11 +65,11 @@ class User
 	# Checks if a recent attempt is within the the time limit of the previous attempt according to
 	# service rules.
 	def check_time(attempt_time, service) 
-		if ((User.get_time.to_i - last_attempt[service]['time'].to_i) <= attempt_time) && (last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d"))
-			return true
+		if ((User.get_time.to_i - last_attempt[service]['time'].to_i) >= attempt_time) && (last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d"))
+			self.add_service_attempt(service)			
+			return false
 		end
-		self.add_service_atempt(service)
-		return false;
+		return true
 	end
 
 	def print_attempt(service)
