@@ -1,4 +1,4 @@
 yum install ruby
 yum install ruby-devel
 gem install rb-inotify
-(crontab -l ; echo "@reboot /root/main.rb")| crontab -
+(crontab -l ; echo "@reboot /root/LxIDS/LxIPS.rb")| crontab -
