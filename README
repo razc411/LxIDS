@@ -2,7 +2,7 @@ A simple IPS system for Linux. Watches multiple user specified files for
 user specified rules. These rules include the ability to create permanent and temporary 
 ip bans.
 
-main.rb - the central ruby script for the IPS, run this to start the IPS
+lxIPS.rb - the central ruby script for the IPS, run this to start the IPS, must be run as super user
 
 install.script - the installation script for the application, must be run as a super user
 	installs the script directly into the crontab so it starts every time you reboot
@@ -10,3 +10,18 @@ install.script - the installation script for the application, must be run as a s
 rules.cfg - the modifiable rules file for the IPS system. Parsed for rules to watch for.
 
 Created using Ruby.
+
+Installing
+----------
+navigate to root of this project in terminal
+chmod +x install.script
+sudo ./install.script
+
+After installing, the program will run on boot.
+
+Running
+----------
+If you wish to run the program without waiting for boot, do this.
+	navigate to LxIPS.rb directory in terminal
+	execute
+		sudo ruby LxIPS.rb

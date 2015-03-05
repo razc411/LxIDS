@@ -38,7 +38,7 @@ $log.each do |logfile|
 		temp.watch(logfile, :modify) do
 			rule_manager.check_rules(aFile) # => sets this function as the callback when the log is modified
 		end
-		temp.run
 	end
 end
+temp.run
                

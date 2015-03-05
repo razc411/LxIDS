@@ -54,7 +54,6 @@ class Manager
 		`sudo iptables -D OUTPUT -j lxIDS 2> /dev/null`
 		`sudo iptables -N lxIDS`
 		`sudo iptables -A INPUT -j lxIDS`
-		`sudo iptables -A OUTPUT -j lxIDS`
 	end
 	# Function 	: add_new_user(ip, rule)
 	# => ip 	: the ip address of the user to add
