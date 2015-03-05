@@ -51,7 +51,6 @@ class Manager
 	def setup_iptables()
 		`sudo iptables -X lxIDS 2> /dev/null`
 		`sudo iptables -D INPUT -j lxIDS 2> /dev/null`
-		`sudo iptables -D OUTPUT -j lxIDS 2> /dev/null`
 		`sudo iptables -N lxIDS`
 		`sudo iptables -A INPUT -j lxIDS`
 	end
@@ -83,7 +82,7 @@ class Manager
 		@@users[ip].attempts[rule.service] 		= 0
 		@@users[ip].status 				= "BANNED"
 		@@users[ip].last_banned 			= User.get_time
-		@@users[ip].time_to_unban 			= User.get_time + rule.time_ban
+		@@users[ip].time_to_unban 			= (User.get_time + (rule.time_ban * 60))/60
 		
 		if(rule.time_ban > 0)
 			unban_thread = Thread.new{unban_user(rule, ip)}
@@ -126,7 +125,7 @@ class Manager
 				if !@@users.has_key?(ip_addr)
 					add_new_user(ip_addr, rule)
 
-				elsif @@users[ip].status == "VALID"
+				elsif @@users[ip_addr].status == "VALID"
 					
 					case @@users[ip_addr].attempts[rule.service]
 						when nil

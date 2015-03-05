@@ -52,7 +52,6 @@ class User
 	# Sets the date and time of the last attempt on a specific service.
 	def set_time_attempt(service)
 		@last_attempt[service]["time"] = User.get_time
-		@last_attempt[service]["date"] = DateTime.now.strftime("%Y%m%d")
 	end
 	# Function 	: check_time(attempt_time, service) 
 	# => attempt_time : the time of a recent rule infraction
@@ -65,13 +64,20 @@ class User
 	# Checks if a recent attempt is within the the time limit of the previous attempt according to
 	# service rules.
 	def check_time(attempt_time, service) 
-		if ((User.get_time.to_i - last_attempt[service]['time'].to_i) >= attempt_time) && (last_attempt[service]['date'] == DateTime.now.strftime("%Y%m%d"))
+		if ((User.get_time - last_attempt[service]['time'].to_i) >= attempt_time)
 			self.add_service_attempt(service)			
 			return false
 		end
 		return true
 	end
-
+	# Function 	: print_attempt(service)
+	#=> service	: the service to be printed about
+	# Author	: Ramzi Chennafi
+	# Date		: Febuary 28 2015
+	# Returns	: Nothing
+	#
+	# Description
+	# Prints data on a service attempt.
 	def print_attempt(service)
 		puts "Failed attempt #" + attempts[service].to_s + " on " + service + " by " + ip + " at " + DateTime.now.to_s
 	end
@@ -83,8 +89,7 @@ class User
 	# Description
 	# Static method for getting the current time in a useful format
 	def self.get_time
-		hours = DateTime.now.strftime("%H").to_i
-		minutes = DateTime.now.strftime("%M").to_i
-		return (hours * 60) + minutes
+		current_time = Time.now.to_i
+		return current_time
 	end
 end

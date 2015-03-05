@@ -37,6 +37,6 @@ class Rule
 	# Description
 	# Prints out an instance of this object's information.
 	def print_rule()
-		puts service + " will ban after " + attempts.to_s + " attempts at event: " + event + ", for " + time_ban.to_s + " minutes."
+		puts service + " will ban after " + attempts.to_s + " attempts at event: " + event + "with attempts within " + attempt_time.to_s + " seconds, for " + time_ban.to_s + " minutes"
 	end
 end

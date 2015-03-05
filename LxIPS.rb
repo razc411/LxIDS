@@ -1,8 +1,5 @@
 #CONFIGURATION#########################################################################
-$log = [
-	"/var/log/secure",
-	"/var/log/tempt.t"
-]			# => Logs to watch for events
+$log = "/var/log/secure"
 $rcfg = "rules.cfg" 		# => rules config file location
 #DO NOT EDIT BELOW, MAIN CODE BODY#####################################################
 #DO NOT EDIT BELOW, MAIN CODE BODY#####################################################
@@ -29,16 +26,13 @@ puts "Intializing rules..."
 
 rule_manager = Manager.new
 
-queue = Array.new
-$log.each do |logfile|
-	File.open(logfile) do |aFile|
-		aFile.seek(0, IO::SEEK_END)
-		temp = INotify::Notifier.new  
-		queue.push(temp)  
-		temp.watch(logfile, :modify) do
-			rule_manager.check_rules(aFile) # => sets this function as the callback when the log is modified
-		end
+
+File.open($log) do |aFile|
+	aFile.seek(0, IO::SEEK_END)
+	temp = INotify::Notifier.new  
+	temp.watch($log, :modify) do
+		rule_manager.check_rules(aFile) # => sets this function as the callback when the log is modified
 	end
-end
 temp.run
+end
                
