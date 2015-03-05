@@ -88,12 +88,15 @@ class Manager
 		@@users[ip].time_to_unban 			= User.get_time + rule.time_ban
 		
 		if(rule.time_ban > 0)
-			unban_thread = Thread.new {
-				sleep(rule.time_ban.minutes)
-				ub_response = "#{rule.unban_response}".sub!('%IP%', ip_addr)
-				`#{ub_response}`
-			}
+			unban_thread = Thread.new{unban_user(rule, ip)}
 		end
+	end
+
+	def unban_user(rule, ip)
+		sleep(rule.time_ban.minutes)
+		ub_response = "#{rule.unban_response}".sub!('%IP%', ip)
+		`#{ub_response}`
+		puts "Unbanned user at " + ip + " for attempts on service " + rule.service + " after " + rule.time_ban + "minutes."
 	end
 	# Function 	: is_user_banned(ip, rule)
 	# => ip 	: the ip address of the user to check
