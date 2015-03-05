@@ -111,21 +111,6 @@ class Manager
 		ub_response = "#{rule.unban_response}".sub!('%IP%', ip)
 		`#{ub_response}`
 	end
-	# Function 	: is_user_banned(ip, rule)
-	# => ip 	: the ip address of the user to check
-	# => rule 	: the rule to check for a ban entry
-	# Author	: Ramzi Chennafi
-	# Date		: Febuary 28 2015
-	# Returns	: Boolean, Returns false if not banned, true if.
-	#
-	# Description
-	# Checks if the specified user is banned.
-	def is_user_banned(ip, rule)
-		if @@users[ip].status == "VALID"
-			return false
-		end 
-		return true
-	end
 	# Function 	: call_rule(line)
 	# => line 	: line from the log file to process
 	# Author	: Ramzi Chennafi
@@ -142,7 +127,7 @@ class Manager
 				if !@@users.has_key?(ip_addr)
 					add_new_user(ip_addr, rule)
 
-				elsif !is_user_banned(ip_addr, rule)
+				elsif @@users[ip].status == "VALID"
 					
 					case @@users[ip_addr].attempts[rule.service]
 						when nil
