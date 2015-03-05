@@ -87,12 +87,12 @@ class Manager
 		@@users[ip].last_banned 			= User.get_time
 		@@users[ip].time_to_unban 			= User.get_time + rule.time_ban
 
-		if(rule.time_ban > 0)
-			minutes 	= @@users[ip].time_to_unban % 60
-			hours 		= @@users[ip].time_to_unban / 60
-			ub_response = "#{rule.unban_response}".sub!('%IP%', ip)
-			`(crontab -l ; echo "#{minutes} #{hours} * * * #{ub_response}")| crontab -`
-		end
+		# if(rule.time_ban > 0)
+		# 	minutes 	= @@users[ip].time_to_unban % 60
+		# 	hours 		= @@users[ip].time_to_unban / 60
+		# 	ub_response = "#{rule.unban_response}".sub!('%IP%', ip)
+		# 	`(crontab -l ; echo "#{minutes} #{hours} * * * #{ub_response}")| crontab -`
+		# end
 	end
 	# Function 	: is_user_banned(ip, rule)
 	# => ip 	: the ip address of the user to check
@@ -147,6 +147,13 @@ class Manager
 								@@users[ip_addr].attempts[rule.service] += 1
 								@@users[ip_addr].print_attempt(rule.service)
 							end
+					end
+				end
+
+				else
+					if(User.get_time >= @@users[ip_addr].time_to_unban)
+						ub_response = "#{rule.unban_response}".sub!('%IP%', ip_addr)
+						`#{ub_response}`
 					end
 				end
 			end
