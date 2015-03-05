@@ -93,9 +93,21 @@ class Manager
 			puts "Added infinite ban for " + ip + " on service " + rule.service + "."
 		end 
 	end
-
+	# Function 	: unban_user(ip, rule)
+	# => ip 	: the ip address of this specific user
+	# => rule 	: rule to check for banning 
+	# Author	: Ramzi Chennafi
+	# Date		: Febuary 28 2015
+	# Returns	: Nothing
+	#
+	# Description
+	# Bans a user for a specified infraction, will establish a cronjob for ban removal
+	# if the rule response is a timeban.
 	def unban_user(rule, ip)
 		sleep(rule.time_ban * 60)
+		user.time_to_unban 	= 0
+		user.last_banned 	= 0
+		user.status 		= "VALID"
 		ub_response = "#{rule.unban_response}".sub!('%IP%', ip)
 		`#{ub_response}`
 	end
@@ -109,15 +121,9 @@ class Manager
 	# Description
 	# Checks if the specified user is banned.
 	def is_user_banned(ip, rule)
-		if @@users[ip].status == "BANNED" && User.get_time >= @@users[ip].time_to_unban
-			@@users[ip].time_to_unban 	= 0
-			@@users[ip].last_banned 	= 0
-			@@users[ip].status 			= "VALID"
-			return false
-		elsif @@users[ip].status == "VALID"
+		if @@users[ip].status == "VALID"
 			return false
 		end 
-
 		return true
 	end
 	# Function 	: call_rule(line)
