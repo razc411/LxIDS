@@ -81,22 +81,23 @@ class Manager
 	# if the rule response is a timeban.
 	def ban_user(ip, rule)
 		system("#{rule.response}".sub!('%IP%', ip))
-		puts "Added ban for " + ip + " on service " + rule.service
-		@@users[ip].attempts[rule.service] 	= 0
-		@@users[ip].status 					= "BANNED"
+		@@users[ip].attempts[rule.service] 		= 0
+		@@users[ip].status 				= "BANNED"
 		@@users[ip].last_banned 			= User.get_time
 		@@users[ip].time_to_unban 			= User.get_time + rule.time_ban
 		
 		if(rule.time_ban > 0)
 			unban_thread = Thread.new{unban_user(rule, ip)}
-		end
+			puts "Added ban for " + ip + " on service " + rule.service + " for " + rule.time_ban.to_s + " minutes."
+		else
+			puts "Added infinite ban for " + ip + " on service " + rule.service + "."
+		end 
 	end
 
 	def unban_user(rule, ip)
-		sleep(rule.time_ban.minutes)
+		sleep(rule.time_ban * 60)
 		ub_response = "#{rule.unban_response}".sub!('%IP%', ip)
 		`#{ub_response}`
-		puts "Unbanned user at " + ip + " for attempts on service " + rule.service + " after " + rule.time_ban + "minutes."
 	end
 	# Function 	: is_user_banned(ip, rule)
 	# => ip 	: the ip address of the user to check
