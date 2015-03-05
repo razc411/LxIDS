@@ -139,7 +139,7 @@ class Manager
 				elsif !is_user_banned(ip_addr, rule)
 					
 					case @@users[ip_addr].attempts[rule.service]
-						when 0
+						when nil
 							@@users[ip_addr].add_service_attempt(rule.service)
 						
 						when (rule.attempts - 1)

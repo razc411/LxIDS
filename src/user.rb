@@ -73,7 +73,7 @@ class User
 	end
 
 	def print_attempt(service)
-		puts "Failed attempt #" + attempts[service].to_s + " on " + service + " by " + ip
+		puts "Failed attempt #" + attempts[service].to_s + " on " + service + " by " + ip + " at " + DateTime.now.to_s
 	end
 	# Function 	: self.get_time
 	# Author	: Ramzi Chennafi

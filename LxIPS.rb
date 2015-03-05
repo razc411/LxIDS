@@ -1,5 +1,8 @@
 #CONFIGURATION#########################################################################
-$log = ["/var/log/secure"]			# => Logs to watch for events
+$log = [
+	"/var/log/secure",
+	"/var/log/tempt.t"
+]			# => Logs to watch for events
 $rcfg = "rules.cfg" 		# => rules config file location
 #DO NOT EDIT BELOW, MAIN CODE BODY#####################################################
 #DO NOT EDIT BELOW, MAIN CODE BODY#####################################################
